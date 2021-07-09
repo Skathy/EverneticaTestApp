@@ -5,66 +5,36 @@ import './style.scss'
 import CountryCard from '../CountryCard/CountryCard';
 
 const MainTable = () => {
-    const [alphaCodeInput, setAlphaCodeInput] = useState('ua')
-    const [country, setCountry] = useState({})
+    const [alphaCodeInput, setAlphaCodeInput] = useState('ukr')
+    const [country, setCountry] = useState([])
+    // const [alphaCode, setAlphaCode]  = useState([])
 
-    const xhr = new XMLHttpRequest()
 
-    const requestURL = `https://restcountries.eu/rest/v2/alpha/${alphaCodeInput}?fields=name;callingCodes;flag`
-    const allAlphaCodes = `https://restcountries.eu/rest/v2/all?fields=alpha2Code;alpha3Code;`
+    const requestURL = `https://restcountries.eu/rest/v2/name/${alphaCodeInput}?fields=name;callingCodes;flag`
+    // const allAlphaCodesURL = `https://restcountries.eu/rest/v2/all?fields=alpha2Code;alpha3Code;name`
 
     useEffect(() => {
-        getAllAlphaCodes('GET', allAlphaCodes)
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
-            // .finally(console.log('All shit is completed'))
+        // fetchAllAlphaCodes()
+        fetchCountry()
     }, [])
 
-    function getAllAlphaCodes(method, url) {
-        return new Promise ( (resolve, reject) => {
-            xhr.open(method, url)
-            xhr.responseType = 'json'
-            xhr.onload = () => {
-                if (xhr.status >= 400) {
-                    reject(xhr.response)
-                } else {
-                    resolve(xhr.response)
-                }
-            }
-            xhr.onerror = () => {
-                reject(xhr.response)
-            }
-            xhr.send()
-        })
-    }
-
-    // function sendRequest (method, url) {
-    //     return new Promise((resolve, reject) => {
-
-    //         xhr.open(method, url)
-
-    //         xhr.responseType = 'json'
-
-    //         xhr.onload = () => {
-    //             if (xhr.status >= 400) {
-    //                 reject(xhr.response)
-    //             } else {
-    //                 resolve(xhr.response)}
-    //         }
-    //         xhr.onerror = () => {
-    //            reject(xhr.response)
-    //         }
-
-    //         xhr.send()
-    //     })
-    // } 
+    // async function fetchAllAlphaCodes()  {
+    //     try {
+    //         const response = await fetch(allAlphaCodesURL)
+    //         const data = await response.json()
+    //         console.log(await data)
+    //         setAlphaCode(await data)
+    //     } catch (e) {
+    //         console.error(e)
+    //     }
+    // }
 
     async function fetchCountry() {
-        console.log('Fetch country started..')
         try {
             const response = await fetch(requestURL)
             const data = await response.json()
             setCountry(await data)
+            // console.log(await data[0])
         } catch (e) {
             console.error(e)
         } finally {
@@ -73,13 +43,16 @@ const MainTable = () => {
     }
 
     const onChangeHandler = e => {
-        setAlphaCodeInput(e.target.value)
-        fetchCountry()
-        // console.log('He;;',country)
+        if (e.target.value.trim() !== '') {
+            setAlphaCodeInput(prev => prev = e.target.value)
+            fetchCountry()  
+        }
     }
     const onClickHandler = () => {
         console.log(`Input is: ${alphaCodeInput}`)
     }
+
+
     return (
         <div className='main-wrapper'>
             <div className='input-wrapper'>
@@ -93,11 +66,22 @@ const MainTable = () => {
                     onClick={onClickHandler}
                 />
             </div>
-            <CountryCard
+            <div className='countries-wrapper'>
+                {country.length ? country.map((item, index) => (
+                    <CountryCard 
+                        key={index} 
+                        countryName={item.name} 
+                        flag={item.flag} 
+                        countryCode={item.callingCodes} 
+                    />)) 
+                : null}
+            </div>
+            
+            {/* <CountryCard
                 countryName={country.name}
                 flag={country.flag}
                 countryCode={country.callingCodes} 
-            />
+            /> */}
         </div>
     )
 }

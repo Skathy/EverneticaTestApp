@@ -1,8 +1,18 @@
 .main-wrapper {
+    max-width: 50rem;
     display: flex;
     flex-direction: column;
     .input-wrapper{
         display: inherit;
         flex-direction: row;
+        align-self: center;
+    }
+    .countries-wrapper {
+        display: inherit;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow: scroll;
+        scrollbar-width: none;
     }
 }
