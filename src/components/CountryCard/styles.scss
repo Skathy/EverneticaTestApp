@@ -1,0 +1,11 @@
+.card-wrapper {
+    display: flex;
+    flex-direction: row;
+    background-color: #c90470;
+    color: #fff;
+    text-align: center;
+    align-items: center;
+    span {
+        width: 100%;
+    }
+}

@@ -1,0 +1,8 @@
+.display-wrapper {
+    display: flex;
+    flex-direction: column;
+    .input-wrapper{
+        display: inherit;
+        flex-direction: row;
+    }
+}
