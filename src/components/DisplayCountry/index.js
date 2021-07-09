@@ -16,7 +16,7 @@ const DisplayCountry = () => {
         console.log(`Input is: ${input}`)
     }
     return (
-        <div className='display-wrapper'>
+        <div className='main-wrapper'>
             <div className='input-wrapper'>
                 <CustomInput 
                     placeholder='Enter country name..'
@@ -29,7 +29,6 @@ const DisplayCountry = () => {
                 />
             </div>
             <CountryCard />
-            {isData ? <div>{input}</div> : null}
         </div>
     )
 }
