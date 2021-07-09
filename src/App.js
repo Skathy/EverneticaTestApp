@@ -1,10 +1,10 @@
 import './App.scss';
-import DisplayCountry from './components/DisplayCountry/index';
+import MainTable from './components/MainTable/index';
 
 function App() {
   return (
     <div className='App'>
-      <DisplayCountry />
+      <MainTable />
     </div>
   );
 }
