@@ -1,6 +1,7 @@
 .main-wrapper {
-    max-width: 70vh;
-    max-height: 70vh;
+    max-width: 80vh;
+    max-height: 80vh;
+    min-width: 50vh;
     display: flex;
     flex-direction: column;
     .input-wrapper{
@@ -9,6 +10,7 @@
         align-self: center;
     }
     .countries-wrapper {
+        margin-top: 0.7rem;
         display: inherit;
         flex-direction: row;
         flex-wrap: wrap;

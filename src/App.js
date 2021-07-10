@@ -1,5 +1,5 @@
-import './App.scss';
 import MainTable from './components/MainTable/index';
+import './App.scss';
 
 function App() {
   return (
