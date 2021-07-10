@@ -3,38 +3,30 @@ import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import './style.scss'
 import CountryCard from '../CountryCard/CountryCard';
+import { useSelector, useDispatch } from 'react-redux'
+import { getCountries } from '../../store/countries/actions';
 
 const MainTable = () => {
+    const dispatch = useDispatch()
     const [alphaCodeInput, setAlphaCodeInput] = useState('ukr')
     const [country, setCountry] = useState([])
     // const [alphaCode, setAlphaCode]  = useState([])
 
+    const countries = useSelector(state => state.countryReducer.countries)
 
     const requestURL = `https://restcountries.eu/rest/v2/name/${alphaCodeInput}?fields=name;callingCodes;flag`
-    // const allAlphaCodesURL = `https://restcountries.eu/rest/v2/all?fields=alpha2Code;alpha3Code;name`
 
     useEffect(() => {
-        // fetchAllAlphaCodes()
         fetchCountry()
+        dispatch(getCountries())
     }, [])
 
-    // async function fetchAllAlphaCodes()  {
-    //     try {
-    //         const response = await fetch(allAlphaCodesURL)
-    //         const data = await response.json()
-    //         console.log(await data)
-    //         setAlphaCode(await data)
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // }
 
     async function fetchCountry() {
         try {
             const response = await fetch(requestURL)
             const data = await response.json()
             setCountry(await data)
-            // console.log(await data[0])
         } catch (e) {
             console.error(e)
         } finally {
@@ -44,12 +36,14 @@ const MainTable = () => {
 
     const onChangeHandler = e => {
         if (e.target.value.trim() !== '') {
-            setAlphaCodeInput(prev => prev = e.target.value)
+            setAlphaCodeInput(e.target.value)
             fetchCountry()  
         }
     }
     const onClickHandler = () => {
-        console.log(`Input is: ${alphaCodeInput}`)
+        console.log('clicked')
+        // console.log(`Input is: ${alphaCodeInput}`)
+        // console.log('state', countries)
     }
 
 
@@ -76,12 +70,6 @@ const MainTable = () => {
                     />)) 
                 : null}
             </div>
-            
-            {/* <CountryCard
-                countryName={country.name}
-                flag={country.flag}
-                countryCode={country.callingCodes} 
-            /> */}
         </div>
     )
 }
