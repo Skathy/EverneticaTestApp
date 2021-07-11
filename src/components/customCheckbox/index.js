@@ -5,7 +5,10 @@ import './style.scss'
 const CustomCheckbox = ({checked, onChange, style}) => {
     return (
         <div className='custom-checkbox-wrapper'>
-            <Checkbox onChange={onChange} style={style}/>
+            <Checkbox
+                checked={checked} 
+                onChange={onChange} 
+                style={style}/>
         </div>
     )
 }

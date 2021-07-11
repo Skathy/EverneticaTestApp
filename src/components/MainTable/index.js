@@ -1,6 +1,7 @@
 import { React, useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { getCountries } from '../../store/countries/actions';
+import { v4 as uuid } from 'uuid';
+import { getCountries, displayCountries, pinned, unpin } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard/CountryCard';
@@ -10,18 +11,23 @@ const MainTable = () => {
     const dispatch = useDispatch()
     const [input, setInput] = useState('ukr')
 
-    const countries = useSelector(state => state.countryReducer.countries)
+    const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
 
     useEffect(() => {
         dispatch(getCountries())
     }, [])
 
     const displayCountry = () => {
-        const triggeredCountry = countries.filter(item => item.name.includes(input))
-        // console.log('TRIGGER',triggeredCountry)
-
-        return triggeredCountry.map(item => item)
+        const triggeredCountry = countries
+            .filter(item => item.name.includes(input))
+            .map(country => Object.assign(country, {isPinned: false, id: uuid()}))
+    
+        dispatch(displayCountries(triggeredCountry))
     }
+
+    useEffect(() => {
+        displayCountry()
+    }, [input])
 
     const onChangeHandler = e => {
         if (e.target.value.trim() !== '') {
@@ -31,7 +37,34 @@ const MainTable = () => {
         }
     }
     const onClickHandler = () => {
-        console.log('clicked')
+        dispatch(displayCountries([]))
+    }
+
+    const pinHandler = (country, id) => {
+        if (country.isPinned === false) {
+            const filteredArr = displayedCountries.map(item => {
+                if (item.id === id) {
+                    return {...item, isPinned: !item.isPinned}
+                } else {
+                    return item
+                }
+            })
+            const pinnedArr = filteredArr.filter(item => item.isPinned === true)
+            dispatch(displayCountries(filteredArr.filter(item => item.isPinned === false)))
+            dispatch(pinned(pinnedArr[0]))
+        } else if (country.isPinned === true) {
+            const filteredArr = pinnedCountries.map(item => {
+                if (item.id === id) {
+                    return {...item, isPinned: !item.isPinned}
+                } else {
+                    return item
+                }
+            })
+            const unpinnedArr = filteredArr.filter(item => item.isPinned === false)
+            displayedCountries.unshift(unpinnedArr[0])
+            dispatch(displayCountries(displayedCountries))
+            dispatch(unpin(filteredArr.filter(item => item.isPinned === true)))
+        }
     }
 
 
@@ -49,13 +82,19 @@ const MainTable = () => {
                 />
             </div>
             <div className='countries-wrapper'>
-                {displayCountry().length ? displayCountry().map( (country, index) => (
-                    <CountryCard 
+                {pinnedCountries.length ? pinnedCountries.map((country, index) => (
+                    <CountryCard
                         key={index}
-                        countryCode={country.callingCodes}
-                        countryName={country.name}
-                        flag={country.flag}
-                        />)
+                        onChange={pinHandler}
+                        country={country}
+                    />)
+                ) : null}
+                {displayedCountries.length ? displayedCountries.map((country, index) => (
+                    <CountryCard
+                        key={index}
+                        onChange={pinHandler}
+                        country={country}
+                    />)
                 ) : null}
             </div>
         </div>
