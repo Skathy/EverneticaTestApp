@@ -6,6 +6,7 @@ const CustomInput = ({onChange, placeholder, value}) => {
     return (
         <div className='custom-input-wrapper'>
             <Input
+                value={value}
                 className='input-field'
                 placeholder={placeholder}
                 onChange={onChange} 

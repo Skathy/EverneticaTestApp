@@ -3,7 +3,7 @@ import CustomButton from '../customButton';
 import CustomCheckbox from './../customCheckbox/index';
 import './styles.scss'
 
-const CountryCard  = ({country, onChange}) => {
+const CountryCard  = ({country, onChange, deleteHandler}) => {
     return (
         <div className='card-wrapper'>
             <img src={country.flag} alt="flag" />
@@ -15,7 +15,8 @@ const CountryCard  = ({country, onChange}) => {
                     onChange={() => onChange(country, country.id)} 
                     style={{color: 'white'}}
                 />
-                <CustomButton 
+                <CustomButton
+                    onClick={() => deleteHandler(country.id)} 
                     style={{color: 'white'}}
                     className='hidden-delete-button' 
                     name='delete'

@@ -33,3 +33,18 @@ export function unpin(payload) {
         payload
     }
 }
+
+export const DELETE_FROM_DISPLAY = 'DELETE_FROM_DISPLAY'
+export function deleteFromDisplay(payload) {
+    return {
+        type: DELETE_FROM_DISPLAY,
+        payload
+    }
+}
+export const DELETE_FROM_PINNED = 'DELETE_FROM_PINNED'
+export function deleteFromPinned(payload) {
+    return {
+        type: DELETE_FROM_PINNED,
+        payload
+    }
+}

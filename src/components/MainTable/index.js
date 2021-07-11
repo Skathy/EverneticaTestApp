@@ -1,7 +1,7 @@
 import { React, useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid';
-import { getCountries, displayCountries, pinned, unpin } from '../../store/countries/actions';
+import { getCountries, displayCountries, pinned, unpin, deleteFromDisplay, deleteFromPinned } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard/CountryCard';
@@ -9,7 +9,7 @@ import './style.scss'
 
 const MainTable = () => {
     const dispatch = useDispatch()
-    const [input, setInput] = useState('ukr')
+    const [input, setInput] = useState('')
 
     const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
 
@@ -18,11 +18,13 @@ const MainTable = () => {
     }, [])
 
     const displayCountry = () => {
-        const triggeredCountry = countries
-            .filter(item => item.name.includes(input))
-            .map(country => Object.assign(country, {isPinned: false, id: uuid()}))
+        if (input.trim() !== '') {
+            const triggeredCountry = countries
+                .filter(item => item.name.includes(input))
+                .map(country => Object.assign(country, {isPinned: false, id: uuid()}))
     
-        dispatch(displayCountries(triggeredCountry))
+            dispatch(displayCountries(triggeredCountry))
+        }
     }
 
     useEffect(() => {
@@ -37,6 +39,7 @@ const MainTable = () => {
         }
     }
     const onClickHandler = () => {
+        setInput('')
         dispatch(displayCountries([]))
     }
 
@@ -67,6 +70,14 @@ const MainTable = () => {
         }
     }
 
+    const deleteHandler = (id) => {
+        const displayedFilteredArr = displayedCountries.filter(item => item.id !== id)
+        const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
+
+        dispatch(deleteFromDisplay(displayedFilteredArr))
+        dispatch(deleteFromPinned(pinnedFilteredArr))
+    }
+
 
     return (
         <div className='main-wrapper'>
@@ -84,6 +95,7 @@ const MainTable = () => {
             <div className='countries-wrapper'>
                 {pinnedCountries.length ? pinnedCountries.map((country, index) => (
                     <CountryCard
+                        deleteHandler={deleteHandler}
                         key={index}
                         onChange={pinHandler}
                         country={country}
@@ -91,6 +103,7 @@ const MainTable = () => {
                 ) : null}
                 {displayedCountries.length ? displayedCountries.map((country, index) => (
                     <CountryCard
+                        deleteHandler={deleteHandler}
                         key={index}
                         onChange={pinHandler}
                         country={country}

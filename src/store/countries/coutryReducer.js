@@ -1,4 +1,4 @@
-import { GET_COUNTRIES, DISPLAY_COUNTRIES, PINNED, UNPIN } from './actions';
+import { GET_COUNTRIES, DISPLAY_COUNTRIES, PINNED, UNPIN, DELETE_FROM_DISPLAY, DELETE_FROM_PINNED } from './actions';
 
 const initialState  = {
     countries: [],
@@ -20,6 +20,12 @@ export default (state = initialState, action) => {
                 displayedCountries: action.payload
             }
         }
+        case DELETE_FROM_DISPLAY: {
+            return {
+                ...state,
+                displayedCountries: action.payload
+            }
+        }
         case PINNED: {
             return {
                 ...state,
@@ -27,6 +33,12 @@ export default (state = initialState, action) => {
             }
         }
         case UNPIN: {
+            return {
+                ...state,
+                pinnedCountries: action.payload
+            }
+        }
+        case DELETE_FROM_PINNED: {
             return {
                 ...state,
                 pinnedCountries: action.payload
