@@ -1,8 +1,8 @@
 import { React, useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned } from '../../store/countries/actions';
+import History from '../../History/History'
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard';
@@ -10,7 +10,6 @@ import './style.scss'
 
 const MainTable = () => {
     const dispatch = useDispatch()
-    const history = useHistory()
     const [input, setInput] = useState('')
 
     const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
@@ -21,8 +20,6 @@ const MainTable = () => {
         } else if (!JSON.parse(sessionStorage.getItem('pinned') )){
             sessionStorage.setItem('pinned', '[]')
         }
-        // dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
-        // dispatch(pin(JSON.parse(sessionStorage.getItem('pinned'))))
         dispatch(getCountries())
     }, [])
 
@@ -107,8 +104,7 @@ const MainTable = () => {
     }
 
     const switchToDetails = (country) => {
-        sessionStorage.setItem('CountryDetails', country.name)
-        history.push({pathname: '/details'})
+        History.push('/details?id='+country.id)
     }
 
 
@@ -129,6 +125,7 @@ const MainTable = () => {
             <div className='countries-wrapper'>
                 {pinnedCountries.length ? pinnedCountries.map((country, index) => (
                     <CountryCard
+                        path={'details?id='+country.id}
                         onClickHandler={switchToDetails}
                         deleteHandler={deleteHandler}
                         key={index}
@@ -138,6 +135,7 @@ const MainTable = () => {
                 ) : null}
                 {displayedCountries.length ? displayedCountries.map((country, index) => (
                     <CountryCard
+                        path={'details?id='+country.id}
                         onClickHandler={switchToDetails}
                         deleteHandler={deleteHandler}
                         key={index}

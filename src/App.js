@@ -1,22 +1,19 @@
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import MainTable from './components/MainTable/index';
-import DisplayDetails from './components/CountryDetails';
 import Flex from './assets/styledComponents/Flex';
+import CountryDetails from './components/CountryDetails/index';
 
 function App() {
+  
   return (
-    <Router>
       <Flex>
-        <Switch>
-          <Route exact path='/'>
-            <MainTable />
-          </Route>
-          <Route path='/details'>
-            <DisplayDetails/>
-          </Route>
-        </Switch>
+        <Router>
+          <Switch>
+            <Route path='/' component={MainTable} exact/>
+            <Route path='/details' component={CountryDetails} />
+          </Switch>
+        </Router>
       </Flex>
-    </Router>
   );
 }
 

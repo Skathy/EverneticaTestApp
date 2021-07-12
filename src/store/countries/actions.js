@@ -1,9 +1,9 @@
 const allCountries = `https://restcountries.eu/rest/v2/all?fields=name;callingCodes;flag;languages;population;currencies`
 
-const countryName = sessionStorage.getItem('CountryDetails').split(' ')[0].toLowerCase()
+// const countryName = sessionStorage.getItem('CountryDetails').split(' ')[0].toLowerCase()
 
 // console.log(countryName.split(' ').toLowerCase()[0])
-const countryURL = `https://restcountries.eu/rest/v2/name/${countryName}?fields=name;callingCodes;flag;languages:name;population;currencies`
+const countryURL = `https://restcountries.eu/rest/v2/name/ukraine?fields=name;callingCodes;flag;languages:name;population;currencies`
 
 
 export const GET_COUNTRY = 'GET_COUNTRY'

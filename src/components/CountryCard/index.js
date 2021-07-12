@@ -2,8 +2,9 @@ import React from 'react';
 import CustomButton from '../customButton';
 import CustomCheckbox from '../customCheckbox/index';
 import './styles.scss'
+import { Link } from 'react-router-dom';
 
-const CountryCard  = ({country, onChange, deleteHandler, onClickHandler}) => {
+const CountryCard  = ({country, onChange, deleteHandler, onClickHandler, path}) => {
     return (
         <div className='card-wrapper'>
             <img src={country.flag} alt="flag" />
@@ -15,12 +16,13 @@ const CountryCard  = ({country, onChange, deleteHandler, onClickHandler}) => {
                     onChange={() => onChange(country, country.id)} 
                     style={{color: 'black'}}
                 />
-                <CustomButton
+                <Link to={path} onClick={() => onClickHandler(country)}>Details</Link>
+                {/* <CustomButton
                     onClick={()=> onClickHandler(country)}
                     style={{color: 'black'}}
                     className='hidden-delete-button' 
                     name='details'
-                />
+                /> */}
                 <CustomButton
                     onClick={() => deleteHandler(country.id)} 
                     style={{color: 'black'}}
