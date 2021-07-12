@@ -1,20 +1,23 @@
+@import '../../assets/colors/colors.scss';
+
 .card-wrapper {
     height: 10rem;
     width: 12rem;
     display: flex;
     flex-direction: column;
-    background-color: #c90470;
-    border: 2px solid #000;
+    background-color: $bg-color;
     border-radius: 0.3rem;
     margin: 0.5rem 0.3rem;
-    color: #fff;
+    color: $black;
     font-size: 1.1rem;
     text-align: center;
     align-items: center;
-    -webkit-box-shadow: 4px 4px 7px 4px rgba(0,0,0,0.75); 
-    box-shadow: 4px 4px 7px 4px rgba(0,0,0,0.75);
+    -webkit-box-shadow: $shadow; 
+    box-shadow: $shadow;
     transition: 0.3s ease-out;
+    cursor: pointer;
     &:hover {
+        background-color: $bg-hover;
         height: 13rem;
         .hidden-menu-wrapper{
             opacity: 1;

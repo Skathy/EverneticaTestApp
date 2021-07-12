@@ -1,9 +1,10 @@
-import { GET_COUNTRIES, DISPLAY_COUNTRIES, PINNED, UNPIN, DELETE_FROM_DISPLAY, DELETE_FROM_PINNED } from './actions';
+import { GET_COUNTRIES, SHOW_DISPLAYED_COUNTRIES, PIN, UNPIN, DELETE_FROM_DISPLAY, DELETE_FROM_PINNED, GET_COUNTRY } from './actions';
 
 const initialState  = {
     countries: [],
     displayedCountries: [],
-    pinnedCountries: []
+    pinnedCountries: [],
+    countryDetails: []
 }
 
 export default (state = initialState, action) => {
@@ -14,7 +15,7 @@ export default (state = initialState, action) => {
                 countries: action.payload
             }
         }
-        case DISPLAY_COUNTRIES: {
+        case SHOW_DISPLAYED_COUNTRIES: {
             return {
                 ...state,
                 displayedCountries: action.payload
@@ -26,7 +27,7 @@ export default (state = initialState, action) => {
                 displayedCountries: action.payload
             }
         }
-        case PINNED: {
+        case PIN: {
             return {
                 ...state,
                 pinnedCountries: [...state.pinnedCountries, action.payload]
@@ -42,6 +43,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pinnedCountries: action.payload
+            }
+        }
+        case GET_COUNTRY: {
+            return {
+                ...state,
+                countryDetails: action.payload
             }
         }
         default: return state

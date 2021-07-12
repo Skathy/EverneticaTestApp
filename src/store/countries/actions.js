@@ -1,27 +1,41 @@
-const allAlphaCodesURL = `https://restcountries.eu/rest/v2/all?fields=name;callingCodes;flag`
+const allCountries = `https://restcountries.eu/rest/v2/all?fields=name;callingCodes;flag;languages;population;currencies`
 
+const countryName = sessionStorage.getItem('CountryDetails').split(' ')[0].toLowerCase()
+
+// console.log(countryName.split(' ').toLowerCase()[0])
+const countryURL = `https://restcountries.eu/rest/v2/name/${countryName}?fields=name;callingCodes;flag;languages:name;population;currencies`
+
+
+export const GET_COUNTRY = 'GET_COUNTRY'
+export function getCountry() {
+    return async dispatch => {
+        const response = await fetch(countryURL)
+        const json = await response.json()
+        dispatch({type: GET_COUNTRY, payload: json})
+    }
+}
 
 export const GET_COUNTRIES = 'GET_COUNTRIES'
 export function getCountries() {
     return async dispatch => {
-        const response = await fetch(allAlphaCodesURL)
+        const response = await fetch(allCountries)
         const json = await response.json() 
         dispatch({type: GET_COUNTRIES, payload: json})
     }
 }
 
-export const DISPLAY_COUNTRIES =  'DISPLAY_COUNTRIES'
-export function displayCountries(payload) {
+export const SHOW_DISPLAYED_COUNTRIES =  'SHOW_DISPLAYED_COUNTRIES'
+export function showDisplayedCountries(payload) {
     return {
-        type: DISPLAY_COUNTRIES,
+        type: SHOW_DISPLAYED_COUNTRIES,
         payload
     }
 }
 
-export const PINNED = 'PINNED'
-export function pinned(payload) {
+export const PIN = 'PIN'
+export function pin(payload) {
     return {
-        type: PINNED,
+        type: PIN,
         payload
     }
 }

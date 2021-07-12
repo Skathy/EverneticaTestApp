@@ -1,9 +1,9 @@
 import React from 'react';
 import CustomButton from '../customButton';
-import CustomCheckbox from './../customCheckbox/index';
+import CustomCheckbox from '../customCheckbox/index';
 import './styles.scss'
 
-const CountryCard  = ({country, onChange, deleteHandler}) => {
+const CountryCard  = ({country, onChange, deleteHandler, onClickHandler}) => {
     return (
         <div className='card-wrapper'>
             <img src={country.flag} alt="flag" />
@@ -13,11 +13,17 @@ const CountryCard  = ({country, onChange, deleteHandler}) => {
                 <CustomCheckbox 
                     checked={country.isPinned} 
                     onChange={() => onChange(country, country.id)} 
-                    style={{color: 'white'}}
+                    style={{color: 'black'}}
+                />
+                <CustomButton
+                    onClick={()=> onClickHandler(country)}
+                    style={{color: 'black'}}
+                    className='hidden-delete-button' 
+                    name='details'
                 />
                 <CustomButton
                     onClick={() => deleteHandler(country.id)} 
-                    style={{color: 'white'}}
+                    style={{color: 'black'}}
                     className='hidden-delete-button' 
                     name='delete'
                 />

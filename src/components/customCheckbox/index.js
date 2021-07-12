@@ -1,6 +1,5 @@
 import React from 'react'
 import { Checkbox } from '@material-ui/core';
-import './style.scss'
 
 const CustomCheckbox = ({checked, onChange, style}) => {
     return (

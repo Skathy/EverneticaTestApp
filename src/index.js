@@ -7,12 +7,12 @@ import './index.scss';
 
 const app = (
   <Provider store={store}>
-    <App />
+      <App />
   </Provider>
 )
 
 ReactDOM.render(
-  app,
+    app,
   document.getElementById('root')
 );
 
