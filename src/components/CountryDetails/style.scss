@@ -3,9 +3,12 @@
 .details-card-wrapper {
     height: 25rem;
     width: 20rem;
-    border: 1px solid $black;
     display: flex;
     flex-direction: column;
+    border-radius: 0.3rem;
+    background-color: $bg-hover;
+    -webkit-box-shadow: $shadow; 
+    box-shadow: $shadow;
     .info-wrapper {
         justify-self: flex-end;
         margin: 0.4rem 0.7rem;
@@ -24,6 +27,10 @@
                 margin-left: auto;
             }
         }
+        .country-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
     }
     .img-wrapper{
         width: 100%;
@@ -37,6 +44,17 @@
             width: 12rem;
         }
         .not-pinned-card {
+            height: 24px;
+            width: 24px;
+            background-image: url('../../assets/pin-off-outline.png');
+            justify-self: end;
+            margin: 0.5rem;
+            margin-left: auto;
+        }
+        .pinned-card {
+            height: 24px;
+            width: 24px;
+            background-image: url('../../assets/pin-outline.png');
             justify-self: end;
             margin: 0.5rem;
             margin-left: auto;
@@ -46,6 +64,17 @@
         width: 100%;
         display: inherit;
         justify-content: center;
-        // margin-top: auto;
+        a {
+            text-decoration: none;
+            color: $black;
+            font-weight: bold;
+            padding: 0.3rem;
+            margin: 1rem;
+            border-radius: 0.2rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                background-color: #e27f7f;
+            }
+        }
     }
 }

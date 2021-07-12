@@ -9,7 +9,7 @@
     border-radius: 0.3rem;
     margin: 0.5rem 0.3rem;
     color: $black;
-    font-size: 1.1rem;
+    // font-size: 1.1rem;
     text-align: center;
     align-items: center;
     -webkit-box-shadow: $shadow; 
@@ -25,6 +25,8 @@
     }
     }
     span {
+        font-size: 1rem;
+        font-weight: bolder;
         padding: 0.3rem;    
         margin: 0.3rem;
     }
@@ -43,5 +45,30 @@
         opacity: 0;
         visibility: hidden;
         transition: visibility 0s, opacity 0.6s linear;
+        .btn-wrapper {
+            margin: 1rem;
+            margin-left: auto;
+            height: 24px;
+            width: 24px;
+            background-image: url('../../assets/delete-forever-outline.png');
+            border-radius: 0.3rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                border-radius: 0.3rem;
+                background-color: #e27f7f;
+            }
+        }
+        a {
+            text-decoration: none;
+            color: $black;
+            font-weight: bold;
+            padding: 0.3rem;
+            border-radius: 0.2rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                background-color: #e27f7f;
+            }
+        }
+
     }
 }

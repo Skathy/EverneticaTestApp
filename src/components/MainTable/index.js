@@ -46,14 +46,14 @@ const MainTable = () => {
         } else if (e.target.value.trim() === '') {
             setInput('')
             dispatch(showDisplayedCountries([]))
-            sessionStorage.setItem('display', [])   
+            sessionStorage.setItem('display', '[]')   
         }
     }
     
     const onClickHandler = () => {
         setInput('')
         dispatch(showDisplayedCountries([]))
-        sessionStorage.setItem('display', [])   
+        sessionStorage.setItem('display', '[]')   
     }
 
     const pinHandler = (country, id) => {

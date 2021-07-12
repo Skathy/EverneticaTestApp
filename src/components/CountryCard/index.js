@@ -9,7 +9,8 @@ const CountryCard  = ({country, onChange, deleteHandler, onClickHandler, path}) 
         <div className='card-wrapper'>
             <img src={country.flag} alt="flag" />
             <span>{country.name}</span>
-            <span>{country.callingCodes ? `Country code: +${country.callingCodes}`: null}</span>
+            {country.callingCodes[0] !== '' ? <span>Country code: +{country.callingCodes}</span> : null}
+            {/* <span>{country.callingCodes ? `Country code: +${country.callingCodes}`: null}</span> */}
             <div className='hidden-menu-wrapper'>
                 <CustomCheckbox 
                     checked={country.isPinned} 
@@ -17,18 +18,9 @@ const CountryCard  = ({country, onChange, deleteHandler, onClickHandler, path}) 
                     style={{color: 'black'}}
                 />
                 <Link to={path} onClick={() => onClickHandler(country)}>Details</Link>
-                {/* <CustomButton
-                    onClick={()=> onClickHandler(country)}
-                    style={{color: 'black'}}
-                    className='hidden-delete-button' 
-                    name='details'
-                /> */}
-                <CustomButton
-                    onClick={() => deleteHandler(country.id)} 
-                    style={{color: 'black'}}
-                    className='hidden-delete-button' 
-                    name='delete'
-                />
+
+                <div className="btn-wrapper" onClick={() => deleteHandler(country.id)}>
+                </div>
             </div>
         </div>
     )

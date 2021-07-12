@@ -19,7 +19,6 @@ const CountryDetails = ( {location} ) => {
         } else if (!JSON.parse(sessionStorage.getItem('pinned'))) {
             sessionStorage.setItem('pinned', '[]')
         }
-        // dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
         setId(id)
     }, [])
 
@@ -45,13 +44,12 @@ const CountryDetails = ( {location} ) => {
             <div className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
-                    {item.isPinned ? <div classNam='pinned-card'>Pinned</div>: <div className='not-pinned-card'>NotPinned</div>}
+                    {item.isPinned ? <div className='pinned-card'></div> : <div className='not-pinned-card'></div>}
                 </div>
                 <div className='info-wrapper'>
-                    <span>
-                        <h4>Country name:</h4>
-                        <h5>{item.name}</h5>
-                    </span>
+                    <div className='country-header'>
+                        <h3>{item.name}</h3>
+                    </div>
                     {item.callingCodes ? 
                         <span>
                             <h4>Country code:</h4>
