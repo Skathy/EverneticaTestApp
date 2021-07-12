@@ -9,7 +9,6 @@
     border-radius: 0.3rem;
     margin: 0.5rem 0.3rem;
     color: $black;
-    // font-size: 1.1rem;
     text-align: center;
     align-items: center;
     -webkit-box-shadow: $shadow; 
@@ -50,7 +49,7 @@
             margin-left: auto;
             height: 24px;
             width: 24px;
-            background-image: url('../../assets/delete-forever-outline.png');
+            background-image: url('../../assets/icons/delete-forever-outline.png');
             border-radius: 0.3rem;
             transition: 0.3s ease-out;   
             &:hover {

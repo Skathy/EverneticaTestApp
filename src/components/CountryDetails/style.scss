@@ -43,18 +43,10 @@
             margin: 0.5rem;
             width: 12rem;
         }
-        .not-pinned-card {
-            height: 24px;
-            width: 24px;
-            background-image: url('../../assets/pin-off-outline.png');
-            justify-self: end;
-            margin: 0.5rem;
-            margin-left: auto;
-        }
         .pinned-card {
-            height: 24px;
-            width: 24px;
-            background-image: url('../../assets/pin-outline.png');
+            height: 36px;
+            width: 36px;
+            background-image: url('../../assets/icons/pin-outline.png');
             justify-self: end;
             margin: 0.5rem;
             margin-left: auto;

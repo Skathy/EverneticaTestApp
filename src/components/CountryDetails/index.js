@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
-import History from '../../History/History';
-import CustomButton from '../customButton/index';
-import './style.scss'
-import { useDispatch, useSelector } from 'react-redux';
-import { pin, showDisplayedCountries } from '../../store/countries/actions';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import './style.scss'
 
 const CountryDetails = ( {location} ) => {
-    const dispatch = useDispatch()
     const {displayedCountries, pinnedCountries} = useSelector(state => state.countryReducer)
     const [id, setId] = useState('')
 
@@ -22,11 +18,6 @@ const CountryDetails = ( {location} ) => {
         setId(id)
     }, [])
 
-
-    const goBack = () => {
-        History.push('/')
-        
-    }
 
     const displayTable = (id) => {
         const filteredArr = displayedCountries.filter(item => item.id === id)
@@ -44,7 +35,7 @@ const CountryDetails = ( {location} ) => {
             <div className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
-                    {item.isPinned ? <div className='pinned-card'></div> : <div className='not-pinned-card'></div>}
+                    {item.isPinned ? <div className='pinned-card'></div> : null}
                 </div>
                 <div className='info-wrapper'>
                     <div className='country-header'>
