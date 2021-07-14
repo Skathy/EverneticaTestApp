@@ -6,10 +6,12 @@ import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard';
 import './style.scss'
+import Flex from './../../assets/styledComponents/Flex';
 
 const MainTable = () => {
     const dispatch = useDispatch()
     const [input, setInput] = useState('')
+    const [currentCard, setCurrentCard] = useState({})
 
     const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
 
@@ -29,7 +31,7 @@ const MainTable = () => {
         if (input.trim() !== '') {
             const triggeredCountry = countries
                 .filter(item => item.name.includes(input))
-                .map(country => Object.assign(country, {isPinned: false, id: uuid()}))
+                .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
     
             dispatch(showDisplayedCountries(triggeredCountry))
             sessionStorage.setItem('display',JSON.stringify(triggeredCountry))
@@ -60,7 +62,7 @@ const MainTable = () => {
 
     const pinHandler = (country, id) => {
         if (country.isPinned === false) {
-            const filteredArr = displayedCountries.map(item => {
+            const filteredArr = displayedCountries.map((item) => {
                 if (item.id === id) {
                     return {...item, isPinned: !item.isPinned}
                 } else {
@@ -76,9 +78,9 @@ const MainTable = () => {
             sessionStorage.setItem('pinned', JSON.stringify(JSON.parse(sessionStorage.getItem('pinned')).concat(pinnedArr)))
 
         } else if (country.isPinned === true) {
-            const filteredArr = pinnedCountries.map(item => {
+            const filteredArr = pinnedCountries.map((item) => {
                 if (item.id === id) {
-                    return {...item, isPinned: !item.isPinned}
+                    return {...item, isPinned: !item.isPinned,}
                 } else {
                     return item
                 }
@@ -106,6 +108,34 @@ const MainTable = () => {
         sessionStorage.setItem('pinned', JSON.stringify(pinnedFilteredArr))
     }
 
+    const dragStartHandler = (e, country) => {
+        setCurrentCard(country)
+    }
+
+    const dragOverHandler = e => {
+        e.preventDefault()
+    }
+
+    const dropHandler = (e, country) => {
+        e.preventDefault()
+        dispatch(showDisplayedCountries(displayedCountries.map( item => {
+            if (item.id === country.id) {
+                return {...item, order: currentCard.order}
+            }
+            if (item.id === currentCard.id) {
+                return {...item, order: country.order}
+            }
+            return item
+        })))
+    }
+
+    const sortCards = (a, b) => {
+        if (a.order > b.order) {
+            return 1
+        } else {
+            return -1
+        }
+    }
 
 
     return (
@@ -122,25 +152,34 @@ const MainTable = () => {
                     style={{fontSize: '1.5rem'}}
                 />
             </div>
-            <div className='countries-wrapper'>
-                {pinnedCountries ? pinnedCountries.map((country, index) => (
-                    <CountryCard
-                        path={'/details?id='+country.id}
-                        deleteHandler={deleteHandler}
-                        key={index}
-                        onChange={pinHandler}
-                        country={country}
-                    />)
-                ) : null}
-                {displayedCountries ? displayedCountries.map((country, index) => (
-                    <CountryCard
-                        path={'/details?id='+country.id}
-                        deleteHandler={deleteHandler}
-                        key={index}
-                        onChange={pinHandler}
-                        country={country}
-                    />)
-                ) : null}
+            <div  className='countries-wrapper'>
+                <Flex justify='center' direction='row'>
+                    {pinnedCountries ? pinnedCountries.map((country, index) => (
+                        <CountryCard
+                            path={'/details?id='+country.id}
+                            deleteHandler={deleteHandler}
+                            key={index}
+                            onChange={pinHandler}
+                            country={country}
+                        />)
+                    ) : null}
+                    {displayedCountries ? displayedCountries.sort(sortCards).map((country, index) => (
+                        <div 
+                            onDragStart={e => dragStartHandler(e, country)}
+                            onDragOver={e => dragOverHandler(e)}
+                            onDrop={e => dropHandler(e, country)}
+                            draggable={true}
+                            key={index}
+                        >
+                            <CountryCard
+                                path={'/details?id='+country.id}
+                                deleteHandler={deleteHandler}
+                                onChange={pinHandler}
+                                country={country}
+                            />
+                        </div>
+                    )) : null}
+                </Flex>
             </div>
         </div>
     )
