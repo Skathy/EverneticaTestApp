@@ -2,7 +2,6 @@ import { React, useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid';
 import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned } from '../../store/countries/actions';
-import History from '../../History/History'
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard';
@@ -92,7 +91,8 @@ const MainTable = () => {
         }
     }
 
-    const deleteHandler = (id) => {
+    const deleteHandler = (e, id) => {
+        e.preventDefault()
         const displayedFilteredArr = displayedCountries.filter(item => item.id !== id)
         const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
 
@@ -103,9 +103,6 @@ const MainTable = () => {
         sessionStorage.setItem('pinned', JSON.stringify(pinnedFilteredArr))
     }
 
-    const switchToDetails = (country) => {
-        History.push('/details?id='+country.id)
-    }
 
 
     return (
@@ -125,8 +122,7 @@ const MainTable = () => {
             <div className='countries-wrapper'>
                 {pinnedCountries.length ? pinnedCountries.map((country, index) => (
                     <CountryCard
-                        path={'details?id='+country.id}
-                        onClickHandler={switchToDetails}
+                        path={'/details?id='+country.id}
                         deleteHandler={deleteHandler}
                         key={index}
                         onChange={pinHandler}
@@ -135,8 +131,7 @@ const MainTable = () => {
                 ) : null}
                 {displayedCountries.length ? displayedCountries.map((country, index) => (
                     <CountryCard
-                        path={'details?id='+country.id}
-                        onClickHandler={switchToDetails}
+                        path={'/details?id='+country.id}
                         deleteHandler={deleteHandler}
                         key={index}
                         onChange={pinHandler}

@@ -1,4 +1,4 @@
-import { GET_COUNTRIES, SHOW_DISPLAYED_COUNTRIES, PIN, UNPIN, DELETE_FROM_DISPLAY, DELETE_FROM_PINNED, GET_COUNTRY } from './actions';
+import { GET_COUNTRIES, SHOW_DISPLAYED_COUNTRIES, PIN, UNPIN, DELETE_FROM_DISPLAY, DELETE_FROM_PINNED} from './actions';
 
 const initialState  = {
     countries: [],
@@ -43,12 +43,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pinnedCountries: action.payload
-            }
-        }
-        case GET_COUNTRY: {
-            return {
-                ...state,
-                countryDetails: action.payload
             }
         }
         default: return state

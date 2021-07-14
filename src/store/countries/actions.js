@@ -1,20 +1,5 @@
 const allCountries = `https://restcountries.eu/rest/v2/all?fields=name;callingCodes;flag;languages;population;currencies`
 
-// const countryName = sessionStorage.getItem('CountryDetails').split(' ')[0].toLowerCase()
-
-// console.log(countryName.split(' ').toLowerCase()[0])
-const countryURL = `https://restcountries.eu/rest/v2/name/ukraine?fields=name;callingCodes;flag;languages:name;population;currencies`
-
-
-export const GET_COUNTRY = 'GET_COUNTRY'
-export function getCountry() {
-    return async dispatch => {
-        const response = await fetch(countryURL)
-        const json = await response.json()
-        dispatch({type: GET_COUNTRY, payload: json})
-    }
-}
-
 export const GET_COUNTRIES = 'GET_COUNTRIES'
 export function getCountries() {
     return async dispatch => {

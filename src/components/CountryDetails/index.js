@@ -31,8 +31,8 @@ const CountryDetails = ( {location} ) => {
 
     return (
         <>
-        {displayTable(id).map( item => (
-            <div className='details-card-wrapper'>
+        {displayTable(id).map( (item, index) => (
+            <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
                     {item.isPinned ? <div className='pinned-card'></div> : null}
