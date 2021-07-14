@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getPinned, showDisplayedCountries } from '../../store/countries/actions';
+import Flex from './../../assets/styledComponents/Flex';
 import './style.scss'
 
 const CountryDetails = ( {location} ) => {
+    const dispatch = useDispatch()
     const {displayedCountries, pinnedCountries} = useSelector(state => state.countryReducer)
     const [id, setId] = useState('')
-
+    
     useEffect(() => {
         const params = new URLSearchParams(location.search)
         const id = params.get('id')
@@ -15,6 +18,8 @@ const CountryDetails = ( {location} ) => {
         } else if (!JSON.parse(sessionStorage.getItem('pinned'))) {
             sessionStorage.setItem('pinned', '[]')
         }
+        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
+        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
         setId(id)
     }, [])
 
@@ -30,7 +35,7 @@ const CountryDetails = ( {location} ) => {
     }
 
     return (
-        <>
+        <Flex>
         {displayTable(id).map( (item, index) => (
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
@@ -41,7 +46,7 @@ const CountryDetails = ( {location} ) => {
                     <div className='country-header'>
                         <h3>{item.name}</h3>
                     </div>
-                    {item.callingCodes ? 
+                    {item.callingCodes[0] !== '' ? 
                         <span>
                             <h4>Country code:</h4>
                             <h5>+{item.callingCodes}</h5>
@@ -67,7 +72,7 @@ const CountryDetails = ( {location} ) => {
                 </div>
             </div>
         ))}  
-        </>
+        </Flex>
     )
 }
 

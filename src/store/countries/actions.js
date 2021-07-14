@@ -25,6 +25,13 @@ export function pin(payload) {
     }
 }
 
+export const GET_PINNED = 'GET_PINNED'
+export function getPinned(payload) {
+    return {
+        type: GET_PINNED,
+        payload
+    }
+}
 export const UNPIN = 'UNPIN'
 export function unpin(payload) {
     return {
@@ -33,17 +40,17 @@ export function unpin(payload) {
     }
 }
 
-export const DELETE_FROM_DISPLAY = 'DELETE_FROM_DISPLAY'
+export const DELETE_DISPLAY_ITEM = 'DELETE_DISPLAY_ITEM'
 export function deleteFromDisplay(payload) {
     return {
-        type: DELETE_FROM_DISPLAY,
+        type: DELETE_DISPLAY_ITEM,
         payload
     }
 }
-export const DELETE_FROM_PINNED = 'DELETE_FROM_PINNED'
+export const DELETE_PINNED_ITEM = 'DELETE_PINNED_ITEM'
 export function deleteFromPinned(payload) {
     return {
-        type: DELETE_FROM_PINNED,
+        type: DELETE_PINNED_ITEM,
         payload
     }
 }

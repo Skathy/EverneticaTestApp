@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import CustomCheckbox from '../customCheckbox/index';
 import './styles.scss'
-import { Link } from 'react-router-dom';
 
 const CountryCard  = ({country, onChange, deleteHandler, path}) => {
     return (

@@ -1,7 +1,7 @@
 import { React, useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid';
-import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned } from '../../store/countries/actions';
+import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned, getPinned } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
 import CountryCard from '../CountryCard';
@@ -16,10 +16,13 @@ const MainTable = () => {
     useEffect(() => {
         if ( !JSON.parse(sessionStorage.getItem('display')) ) {
             sessionStorage.setItem('display', '[]')
-        } else if (!JSON.parse(sessionStorage.getItem('pinned') )){
+        } if (!JSON.parse(sessionStorage.getItem('pinned') )){
             sessionStorage.setItem('pinned', '[]')
         }
+
         dispatch(getCountries())
+        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
+        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
     }, [])
 
     const displayCountry = () => {
@@ -69,8 +72,11 @@ const MainTable = () => {
             dispatch(showDisplayedCountries(filteredArr.filter(item => item.isPinned === false)))
             sessionStorage.setItem('display', JSON.stringify(filteredArr.filter(item => item.isPinned === false)))
 
+            console.log('PINNED ARR', pinnedArr)
+            console.log('PINNED ELEM', pinnedArr[0])
+
             dispatch(pin(pinnedArr[0]))
-            sessionStorage.setItem('pinned', JSON.stringify(pinnedArr[0]))
+            sessionStorage.setItem('pinned', JSON.stringify(JSON.parse(sessionStorage.getItem('pinned')).concat(pinnedArr)))
 
         } else if (country.isPinned === true) {
             const filteredArr = pinnedCountries.map(item => {
@@ -120,7 +126,7 @@ const MainTable = () => {
                 />
             </div>
             <div className='countries-wrapper'>
-                {pinnedCountries.length ? pinnedCountries.map((country, index) => (
+                {pinnedCountries ? pinnedCountries.map((country, index) => (
                     <CountryCard
                         path={'/details?id='+country.id}
                         deleteHandler={deleteHandler}
@@ -129,7 +135,7 @@ const MainTable = () => {
                         country={country}
                     />)
                 ) : null}
-                {displayedCountries.length ? displayedCountries.map((country, index) => (
+                {displayedCountries ? displayedCountries.map((country, index) => (
                     <CountryCard
                         path={'/details?id='+country.id}
                         deleteHandler={deleteHandler}
