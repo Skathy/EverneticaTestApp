@@ -35,7 +35,7 @@ const CountryDetails = ( {location} ) => {
     }
 
     return (
-        <Flex>
+        <Flex justify='center'>
         {displayTable(id).map( (item, index) => (
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>

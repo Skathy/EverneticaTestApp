@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 const StyledFlex = styled.div`
     display: flex;
-    flex-direction: ${({direction}) => direction || 'row'};
-    align-item: ${({align}) => align || 'center'};
-    justify-content: ${({justify}) => justify || 'center'};
+    height: 100%;
+    flex-direction: ${({direction}) => direction || 'column'};
+    align-items: ${({align}) => align || 'center'};
+    justify-content: ${({justify}) => justify || 'flex-start'};
     margin: ${({margin}) => margin || 0};
-    margin-top: 5rem;
 `
 const Flex = (props) => {
     return <StyledFlex {...props}/>

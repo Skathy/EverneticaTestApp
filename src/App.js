@@ -6,7 +6,7 @@ import CountryDetails from './components/CountryDetails/index';
 function App() {
   
   return (
-      <Flex>
+      <Flex a>
         <Router>
           <Switch>
             <Route path='/' component={MainTable} exact/>

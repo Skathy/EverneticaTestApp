@@ -72,9 +72,6 @@ const MainTable = () => {
             dispatch(showDisplayedCountries(filteredArr.filter(item => item.isPinned === false)))
             sessionStorage.setItem('display', JSON.stringify(filteredArr.filter(item => item.isPinned === false)))
 
-            console.log('PINNED ARR', pinnedArr)
-            console.log('PINNED ELEM', pinnedArr[0])
-
             dispatch(pin(pinnedArr[0]))
             sessionStorage.setItem('pinned', JSON.stringify(JSON.parse(sessionStorage.getItem('pinned')).concat(pinnedArr)))
 
