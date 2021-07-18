@@ -7,7 +7,10 @@ const CountryCard  = ({country, onChange, deleteHandler, path}) => {
     return (
         <Link to={path} >
             <div className='card-wrapper'>
-                <img src={country.flag} alt="flag" />
+                <div className='card-header'>
+                    <img src={country.flag} alt="flag" />
+                    {country.isPinned ? <div className='pinned-card'></div> : null}
+                </div>
                 <span>{country.name}</span>
                 {country.callingCodes[0] !== '' ? <span>Country code: +{country.callingCodes}</span> : null}
                 <div className='hidden-menu-wrapper'>

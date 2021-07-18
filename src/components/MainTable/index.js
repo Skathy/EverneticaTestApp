@@ -12,18 +12,7 @@ const MainTable = () => {
     const [input, setInput] = useState('')
     const [currentCard, setCurrentCard] = useState({})
 
-    const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
-
-    
-    // const displayCountry = () => {
-    //     if (input.trim() !== '') {
-    //         console.log('INIT', countries)
-    //         const triggeredCountry = countries
-    //         .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
-    //         console.log('TRIGGER', triggeredCountry)
-    //         dispatch(showDisplayedCountries(triggeredCountry))
-    //     }
-    // }
+    const {displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
     
     useEffect(() => {
         dispatch(getCountries(input))
