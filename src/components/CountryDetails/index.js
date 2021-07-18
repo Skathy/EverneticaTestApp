@@ -1,42 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getPinned, showDisplayedCountries } from '../../store/countries/actions';
+import { Link, useParams } from 'react-router-dom';
+import { getDetails } from '../../store/countries/actions';
 import Flex from './../../assets/styledComponents/Flex';
 import './style.scss'
 
-const CountryDetails = ( {location} ) => {
+const CountryDetails = () => {
+    const {countryName} = useParams()
     const dispatch = useDispatch()
-    const {displayedCountries, pinnedCountries} = useSelector(state => state.countryReducer)
-    const [id, setId] = useState('')
+    const {details} = useSelector(state => state.countryReducer)
     
+    console.log('params',JSON.stringify(details))
     useEffect(() => {
-        const params = new URLSearchParams(location.search)
-        const id = params.get('id')
-        if (!JSON.parse(sessionStorage.getItem('display'))) {
-            sessionStorage.setItem('display', '[]')
-        } else if (!JSON.parse(sessionStorage.getItem('pinned'))) {
-            sessionStorage.setItem('pinned', '[]')
-        }
-        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
-        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
-        setId(id)
+        dispatch(getDetails(countryName))
     }, [])
-
-
-    const displayTable = (id) => {
-        const filteredArr = displayedCountries.filter(item => item.id === id)
-        if (filteredArr.length) {
-            return filteredArr.map(item => item)
-        } else {
-            const filterPinnedArr = pinnedCountries.filter(item => item.id === id)
-            return filterPinnedArr.map(item => item)
-        }
-    }
 
     return (
         <Flex justify='center'>
-        {displayTable(id).map( (item, index) => (
+        {details.map( (item, index) => (
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />

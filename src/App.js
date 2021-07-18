@@ -10,7 +10,7 @@ function App() {
         <Router>
           <Switch>
             <Route path='/' component={MainTable} exact/>
-            <Route path='/details' component={CountryDetails}/>
+            <Route path='/details/:id' component={CountryDetails}/>
           </Switch>
         </Router>
       </Flex>

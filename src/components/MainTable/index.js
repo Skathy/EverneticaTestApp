@@ -156,7 +156,7 @@ const MainTable = () => {
                 <Flex justify='center' direction='row'>
                     {pinnedCountries ? pinnedCountries.map((country, index) => (
                         <CountryCard
-                            path={'/details?id='+country.id}
+                            path={'/details/'+country.name}
                             deleteHandler={deleteHandler}
                             key={index}
                             onChange={pinHandler}
@@ -172,7 +172,7 @@ const MainTable = () => {
                             key={index}
                         >
                             <CountryCard
-                                path={'/details?id='+country.id}
+                                path={'/details/'+country.name}
                                 deleteHandler={deleteHandler}
                                 onChange={pinHandler}
                                 country={country}

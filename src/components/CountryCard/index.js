@@ -5,7 +5,7 @@ import './styles.scss'
 
 const CountryCard  = ({country, onChange, deleteHandler, path}) => {
     return (
-        <Link to={`${path}`} >
+        <Link to={path} >
             <div className='card-wrapper'>
                 <img src={country.flag} alt="flag" />
                 <span>{country.name}</span>
