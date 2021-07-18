@@ -15,30 +15,16 @@ const MainTable = () => {
 
     const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
 
-    useEffect(() => {
-        if ( !JSON.parse(sessionStorage.getItem('display')) ) {
-            sessionStorage.setItem('display', '[]')
-        } if (!JSON.parse(sessionStorage.getItem('pinned') )){
-            sessionStorage.setItem('pinned', '[]')
-        }
-
-        dispatch(getCountries())
-        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
-        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
-    }, [])
-
     const displayCountry = () => {
         if (input.trim() !== '') {
             const triggeredCountry = countries
-                .filter(item => item.name.includes(input))
                 .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
-    
             dispatch(showDisplayedCountries(triggeredCountry))
-            sessionStorage.setItem('display',JSON.stringify(triggeredCountry))
         }
     }
 
     useEffect(() => {
+        dispatch(getCountries(input))
         displayCountry()
     }, [input])
 
@@ -50,14 +36,12 @@ const MainTable = () => {
         } else if (e.target.value.trim() === '') {
             setInput('')
             dispatch(showDisplayedCountries([]))
-            sessionStorage.setItem('display', '[]')   
         }
     }
     
     const onClickHandler = () => {
         setInput('')
         dispatch(showDisplayedCountries([]))
-        sessionStorage.setItem('display', '[]')   
     }
 
     const pinHandler = (country, id) => {
@@ -72,10 +56,7 @@ const MainTable = () => {
             const pinnedArr = filteredArr.filter(item => item.isPinned === true)
 
             dispatch(showDisplayedCountries(filteredArr.filter(item => item.isPinned === false)))
-            sessionStorage.setItem('display', JSON.stringify(filteredArr.filter(item => item.isPinned === false)))
-
             dispatch(pin(pinnedArr[0]))
-            sessionStorage.setItem('pinned', JSON.stringify(JSON.parse(sessionStorage.getItem('pinned')).concat(pinnedArr)))
 
         } else if (country.isPinned === true) {
             const filteredArr = pinnedCountries.map((item) => {
@@ -89,10 +70,7 @@ const MainTable = () => {
             displayedCountries.unshift(unpinnedArr[0])
 
             dispatch(showDisplayedCountries(displayedCountries))
-            sessionStorage.setItem('display',JSON.stringify(displayedCountries))
-
             dispatch(unpin(filteredArr.filter(item => item.isPinned === true)))
-            sessionStorage.setItem('pinned', JSON.stringify(filteredArr.filter(item => item.isPinned === true)))
         }
     }
 
@@ -102,10 +80,8 @@ const MainTable = () => {
         const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
 
         dispatch(deleteFromDisplay(displayedFilteredArr))
-        sessionStorage.setItem('display', JSON.stringify(displayedFilteredArr))
 
         dispatch(deleteFromPinned(pinnedFilteredArr))
-        sessionStorage.setItem('pinned', JSON.stringify(pinnedFilteredArr))
     }
 
     const dragStartHandler = (e, country) => {
@@ -137,6 +113,20 @@ const MainTable = () => {
         }
     }
 
+    const countryName = (name) => {
+        const filteredArr = countries.filter(item => item.name === name)
+        if (filteredArr.length) {
+            return '/details/'+filteredArr[0].alpha3Code
+        } else {
+            const filteredPinArr = pinnedCountries.filter(item => item.name === name)
+            if( filteredPinArr.length) {
+                return '/details/'+filteredPinArr[0].alpha3Code
+            } else {
+                return 
+            }
+        }
+    }
+
 
     return (
         <div className='main-wrapper'>
@@ -156,7 +146,7 @@ const MainTable = () => {
                 <Flex justify='center' direction='row'>
                     {pinnedCountries ? pinnedCountries.map((country, index) => (
                         <CountryCard
-                            path={'/details/'+country.name}
+                            path={() => countryName(country.name)}
                             deleteHandler={deleteHandler}
                             key={index}
                             onChange={pinHandler}
@@ -172,7 +162,7 @@ const MainTable = () => {
                             key={index}
                         >
                             <CountryCard
-                                path={'/details/'+country.name}
+                                path={() => countryName(country.name)}
                                 deleteHandler={deleteHandler}
                                 onChange={pinHandler}
                                 country={country}

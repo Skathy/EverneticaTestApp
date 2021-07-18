@@ -1,18 +1,16 @@
-const allCountries = `https://restcountries.eu/rest/v2/all`
-
 export const GET_DETAILS = 'GET_DETAILS'
 export const getDetails = (name) => {
     return async dispatch => {
-        const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+        const response = await fetch(`https://restcountries.eu/rest/v2/alpha/${name}`)
         const json = await response.json()
         dispatch({type: GET_DETAILS, payload: json})
     }
 }
 
 export const GET_COUNTRIES = 'GET_COUNTRIES'
-export function getCountries() {
+export function getCountries(name) {
     return async dispatch => {
-        const response = await fetch(allCountries)
+        const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
         const json = await response.json() 
         dispatch({type: GET_COUNTRIES, payload: json})
     }

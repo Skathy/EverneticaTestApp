@@ -8,16 +8,26 @@ import './style.scss'
 const CountryDetails = () => {
     const {countryName} = useParams()
     const dispatch = useDispatch()
-    const {details} = useSelector(state => state.countryReducer)
+    const {details, pinnedCountries} = useSelector(state => state.countryReducer)
     
-    console.log('params',JSON.stringify(details))
+    console.log('params',details)
     useEffect(() => {
         dispatch(getDetails(countryName))
     }, [])
 
+    const display = (alpha) => {
+        const filteredArr = pinnedCountries.filter(item => item.alpha3Code === alpha)
+        console.log(filteredArr)
+        if (filteredArr.length) {
+            return filteredArr
+        } else {
+            return details
+        }
+    }
+
     return (
         <Flex justify='center'>
-        {details.map( (item, index) => (
+        {display(countryName).map( (item, index) => (
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
