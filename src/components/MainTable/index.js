@@ -33,6 +33,7 @@ const MainTable = () => {
             const text = e.target.value
             const capitalizeText = text.split(' ').map( word => word.charAt(0).toUpperCase() + word.slice(1) ).join(' ')
             setInput(capitalizeText)
+            console.log(capitalizeText)
         } else if (e.target.value.trim() === '') {
             setInput('')
             dispatch(showDisplayedCountries([]))
@@ -118,7 +119,7 @@ const MainTable = () => {
         if( filteredPinArr.length) {
             return '/details/'+filteredPinArr[0].alpha3Code+'/isPinned'
         } else {
-            const filteredArr = countries.filter(item => item.name === name)
+            const filteredArr = displayedCountries.filter(item => item.name === name)
             if (filteredArr.length) {
                 return '/details/'+filteredArr[0].alpha3Code+'/notPinned'
             } else {
@@ -144,7 +145,7 @@ const MainTable = () => {
             </div>
             <div  className='countries-wrapper'>
                 <Flex justify='center' direction='row'>
-                    {pinnedCountries ? pinnedCountries.map((country, index) => (
+                    {pinnedCountries.length ? pinnedCountries.map((country, index) => (
                         <CountryCard
                             path={() => countryName(country.name)}
                             deleteHandler={deleteHandler}
@@ -153,7 +154,7 @@ const MainTable = () => {
                             country={country}
                         />)
                     ) : null}
-                    {displayedCountries ? displayedCountries.sort(sortCards).map((country, index) => (
+                    {displayedCountries.length ? displayedCountries.sort(sortCards).map((country, index) => (
                         <div 
                             onDragStart={e => dragStartHandler(e, country)}
                             onDragOver={e => dragOverHandler(e)}

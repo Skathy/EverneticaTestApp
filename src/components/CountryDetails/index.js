@@ -12,19 +12,16 @@ const CountryDetails = () => {
     const dispatch = useDispatch()
     const {details, pinnedCountries} = useSelector(state => state.countryReducer)
     
-    console.log('params',isPinned)
     useEffect(() => {
         dispatch(getDetails(countryName))
         if (isPinned === 'isPinned') {
-            setPinned(true)
+            setPinned(prev => !prev)
         }
     }, [])
 
     const display = (alpha) => {
         const filteredArr = pinnedCountries.filter(item => item.alpha3Code === alpha)
-        console.log(filteredArr)
         if (filteredArr.length) {
-            // setPinned(true)
             return filteredArr
         } else {
             return details

@@ -14,7 +14,6 @@ const CountryCard  = ({country, onChange, deleteHandler, path}) => {
                     <CustomCheckbox 
                         checked={country.isPinned} 
                         onChange={() => onChange(country, country.id)}
-                        style={{color: 'black'}}
                     />
                     <div className="btn-wrapper" onClick={(e) => deleteHandler(e, country.id)}></div>
                 </div>

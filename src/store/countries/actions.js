@@ -10,9 +10,17 @@ export const getDetails = (name) => {
 export const GET_COUNTRIES = 'GET_COUNTRIES'
 export function getCountries(name) {
     return async dispatch => {
-        const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
-        const json = await response.json() 
-        dispatch({type: GET_COUNTRIES, payload: json})
+        try {
+            const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+            const json = await response.json()
+            if (json.status) {
+                console.error('Err:', json.status)
+            } else {
+                dispatch({type: GET_COUNTRIES, payload: json})
+            }
+        } catch (e) {
+            console.error('Err', e)
+        } 
     }
 }
 
