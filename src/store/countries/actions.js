@@ -1,3 +1,6 @@
+import { v4 as uuid } from 'uuid';
+
+
 export const GET_DETAILS = 'GET_DETAILS'
 export const getDetails = (name) => {
     return async dispatch => {
@@ -11,12 +14,12 @@ export const GET_COUNTRIES = 'GET_COUNTRIES'
 export function getCountries(name) {
     return async dispatch => {
         try {
-            const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+            const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}?fields=name;callingCodes;alpha3Code;languages;population;currencies;flag`)
             const json = await response.json()
             if (json.status) {
                 console.error('Err:', json.status)
             } else {
-                dispatch({type: GET_COUNTRIES, payload: json})
+                dispatch({type: SHOW_DISPLAYED_COUNTRIES, payload: json.map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))})
             }
         } catch (e) {
             console.error('Err', e)

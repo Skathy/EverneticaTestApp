@@ -1,6 +1,5 @@
-import { React, useState, useEffect} from 'react';
+import { React, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { v4 as uuid } from 'uuid';
 import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned, getPinned } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
@@ -15,25 +14,28 @@ const MainTable = () => {
 
     const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
 
-    const displayCountry = () => {
-        if (input.trim() !== '') {
-            const triggeredCountry = countries
-                .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
-            dispatch(showDisplayedCountries(triggeredCountry))
-        }
-    }
-
+    
+    // const displayCountry = () => {
+    //     if (input.trim() !== '') {
+    //         console.log('INIT', countries)
+    //         const triggeredCountry = countries
+    //         .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
+    //         console.log('TRIGGER', triggeredCountry)
+    //         dispatch(showDisplayedCountries(triggeredCountry))
+    //     }
+    // }
+    
     useEffect(() => {
         dispatch(getCountries(input))
-        displayCountry()
+        
     }, [input])
+
 
     const onChangeHandler = e => {
         if (e.target.value.trim() !== '') {
             const text = e.target.value
             const capitalizeText = text.split(' ').map( word => word.charAt(0).toUpperCase() + word.slice(1) ).join(' ')
             setInput(capitalizeText)
-            console.log(capitalizeText)
         } else if (e.target.value.trim() === '') {
             setInput('')
             dispatch(showDisplayedCountries([]))
@@ -81,7 +83,6 @@ const MainTable = () => {
         const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
 
         dispatch(deleteFromDisplay(displayedFilteredArr))
-
         dispatch(deleteFromPinned(pinnedFilteredArr))
     }
 
