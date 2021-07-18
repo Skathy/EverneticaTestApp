@@ -10,7 +10,7 @@ function App() {
         <Router>
           <Switch>
             <Route path='/' component={MainTable} exact/>
-            <Route path='/details/:countryName' component={CountryDetails}/>
+            <Route path='/details/:countryName/:isPinned' component={CountryDetails}/>
           </Switch>
         </Router>
       </Flex>

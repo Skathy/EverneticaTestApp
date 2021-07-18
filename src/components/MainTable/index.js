@@ -114,13 +114,13 @@ const MainTable = () => {
     }
 
     const countryName = (name) => {
-        const filteredArr = countries.filter(item => item.name === name)
-        if (filteredArr.length) {
-            return '/details/'+filteredArr[0].alpha3Code
+        const filteredPinArr = pinnedCountries.filter(item => item.name === name)
+        if( filteredPinArr.length) {
+            return '/details/'+filteredPinArr[0].alpha3Code+'/isPinned'
         } else {
-            const filteredPinArr = pinnedCountries.filter(item => item.name === name)
-            if( filteredPinArr.length) {
-                return '/details/'+filteredPinArr[0].alpha3Code
+            const filteredArr = countries.filter(item => item.name === name)
+            if (filteredArr.length) {
+                return '/details/'+filteredArr[0].alpha3Code+'/notPinned'
             } else {
                 return 
             }

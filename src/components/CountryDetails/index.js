@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getDetails } from '../../store/countries/actions';
@@ -6,19 +6,25 @@ import Flex from './../../assets/styledComponents/Flex';
 import './style.scss'
 
 const CountryDetails = () => {
-    const {countryName} = useParams()
+    const [pinned, setPinned] = useState(false)
+
+    const {countryName, isPinned} = useParams()
     const dispatch = useDispatch()
     const {details, pinnedCountries} = useSelector(state => state.countryReducer)
     
-    console.log('params',details)
+    console.log('params',isPinned)
     useEffect(() => {
         dispatch(getDetails(countryName))
+        if (isPinned === 'isPinned') {
+            setPinned(true)
+        }
     }, [])
 
     const display = (alpha) => {
         const filteredArr = pinnedCountries.filter(item => item.alpha3Code === alpha)
         console.log(filteredArr)
         if (filteredArr.length) {
+            // setPinned(true)
             return filteredArr
         } else {
             return details
@@ -31,7 +37,7 @@ const CountryDetails = () => {
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
-                    {item.isPinned ? <div className='pinned-card'></div> : null}
+                    {pinned ? <div className='pinned-card'></div> : null}
                 </div>
                 <div className='info-wrapper'>
                     <div className='country-header'>
