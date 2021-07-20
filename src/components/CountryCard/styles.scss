@@ -1,0 +1,98 @@
+@import '../../assets/colors/colors.scss';
+
+.card-wrapper {
+    height: 10rem;
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-color;
+    border-radius: 0.3rem;
+    margin: 0.5rem 0.3rem;
+    color: $black;
+    text-align: center;
+    align-items: center;
+    -webkit-box-shadow: $shadow; 
+    box-shadow: $shadow;
+    transition: 0.3s ease-out;
+    cursor: pointer;
+    .card-header {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        img{
+            margin: 0.5rem;
+            width: 3rem;
+            height: 2rem;
+        }
+        .pinned-card {
+            height: 36px;
+            width: 36px;
+            background-image: url('../../assets/icons/pin-outline.png');
+            justify-self: end;
+            margin: 0.5rem;
+            margin-left: auto;
+        }
+    }
+    &:hover {
+        background-color: $bg-hover;
+        height: 13rem;
+        .hidden-menu-wrapper{
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+    
+    span {
+        font-size: 1rem;
+        font-weight: bolder;
+        padding: 0.3rem;    
+        margin: 0.3rem;
+    }
+    .pinned-card {
+        height: 36px;
+        width: 36px;
+        background-image: url('../../assets/icons/pin-outline.png');
+        justify-self: end;
+        margin: 0.5rem;
+        margin-left: auto;
+    }
+    .hidden-menu-wrapper {
+        width: 100%;
+        margin-top: auto;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        opacity: 0;
+        visibility: hidden;
+        transition: visibility 0s, opacity 0.6s linear;
+        .btn-wrapper {
+            margin: 1rem;
+            margin-left: auto;
+            height: 24px;
+            width: 24px;
+            background-image: url('../../assets/icons/delete-forever-outline.png');
+            border-radius: 0.3rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                border-radius: 0.3rem;
+                background-color: #e27f7f;
+            }
+        }
+        a {
+            text-decoration: none;
+            color: $black;
+            font-weight: bold;
+            padding: 0.3rem;
+            border-radius: 0.2rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                background-color: #e27f7f;
+            }
+        }
+
+    }
+    
+}

@@ -1,0 +1,72 @@
+@import '../../assets/colors/colors.scss';
+
+.details-card-wrapper {
+    height: 25rem;
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.3rem;
+    background-color: $bg-hover;
+    -webkit-box-shadow: $shadow; 
+    box-shadow: $shadow;
+    .info-wrapper {
+        justify-self: flex-end;
+        margin: 0.4rem 0.7rem;
+        display: inherit;
+        flex-direction: column;
+        font-size: 1.2rem;
+        justify-self: end;
+        margin-top: auto;
+        span {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            flex-direction: row;
+            h5{
+                justify-self: end;
+                margin-left: auto;
+            }
+        }
+        .country-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    }
+    .img-wrapper{
+        width: 100%;
+        height: 7rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        img {
+            margin: 0.5rem;
+            width: 12rem;
+        }
+        .pinned-card {
+            height: 36px;
+            width: 36px;
+            background-image: url('../../assets/icons/pin-outline.png');
+            justify-self: end;
+            margin: 0.5rem;
+            margin-left: auto;
+        }
+    } 
+    .btn-wrapper {
+        width: 100%;
+        display: inherit;
+        justify-content: center;
+        a {
+            text-decoration: none;
+            color: $black;
+            font-weight: bold;
+            padding: 0.3rem;
+            margin: 1rem;
+            border-radius: 0.2rem;
+            transition: 0.3s ease-out;   
+            &:hover {
+                background-color: #e27f7f;
+            }
+        }
+    }
+}
