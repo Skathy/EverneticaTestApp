@@ -1,46 +1,40 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getPinned, showDisplayedCountries } from '../../store/countries/actions';
+import { Link, useParams } from 'react-router-dom';
+import { getDetails } from '../../store/countries/actions';
 import Flex from './../../assets/styledComponents/Flex';
 import './style.scss'
 
-const CountryDetails = ( {location} ) => {
+const CountryDetails = () => {
+    const [pinned, setPinned] = useState(false)
+
+    const {countryName, isPinned} = useParams()
     const dispatch = useDispatch()
-    const {displayedCountries, pinnedCountries} = useSelector(state => state.countryReducer)
-    const [id, setId] = useState('')
+    const {details, pinnedCountries} = useSelector(state => state.countryReducer)
     
     useEffect(() => {
-        const params = new URLSearchParams(location.search)
-        const id = params.get('id')
-        if (!JSON.parse(sessionStorage.getItem('display'))) {
-            sessionStorage.setItem('display', '[]')
-        } else if (!JSON.parse(sessionStorage.getItem('pinned'))) {
-            sessionStorage.setItem('pinned', '[]')
+        dispatch(getDetails(countryName))
+        if (isPinned === 'isPinned') {
+            setPinned(prev => !prev)
         }
-        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
-        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
-        setId(id)
     }, [])
 
-
-    const displayTable = (id) => {
-        const filteredArr = displayedCountries.filter(item => item.id === id)
+    const display = (alpha) => {
+        const filteredArr = pinnedCountries.filter(item => item.alpha3Code === alpha)
         if (filteredArr.length) {
-            return filteredArr.map(item => item)
+            return filteredArr
         } else {
-            const filterPinnedArr = pinnedCountries.filter(item => item.id === id)
-            return filterPinnedArr.map(item => item)
+            return details
         }
     }
 
     return (
         <Flex justify='center'>
-        {displayTable(id).map( (item, index) => (
+        {display(countryName).map( (item, index) => (
             <div key={index} className='details-card-wrapper'>
                 <div className='img-wrapper'>
                     <img src={item.flag} alt="flag" />
-                    {item.isPinned ? <div className='pinned-card'></div> : null}
+                    {pinned ? <div className='pinned-card'></div> : null}
                 </div>
                 <div className='info-wrapper'>
                     <div className='country-header'>

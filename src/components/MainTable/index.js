@@ -1,6 +1,6 @@
-import { React, useState, useEffect} from 'react';
+import { React, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { v4 as uuid } from 'uuid';
+import { useHistory, useParams } from 'react-router-dom';
 import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned, getPinned } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
@@ -9,38 +9,25 @@ import './style.scss'
 import Flex from './../../assets/styledComponents/Flex';
 
 const MainTable = () => {
+    const {pinned} = useParams()
+    const history = useHistory()
     const dispatch = useDispatch()
     const [input, setInput] = useState('')
     const [currentCard, setCurrentCard] = useState({})
+    const [urlParam, setUrlParam] = useState([])
 
-    const {countries, displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
-
-    useEffect(() => {
-        if ( !JSON.parse(sessionStorage.getItem('display')) ) {
-            sessionStorage.setItem('display', '[]')
-        } if (!JSON.parse(sessionStorage.getItem('pinned') )){
-            sessionStorage.setItem('pinned', '[]')
-        }
-
-        dispatch(getCountries())
-        dispatch(showDisplayedCountries(JSON.parse(sessionStorage.getItem('display'))))
-        dispatch(getPinned(JSON.parse(sessionStorage.getItem('pinned'))))
-    }, [])
-
-    const displayCountry = () => {
-        if (input.trim() !== '') {
-            const triggeredCountry = countries
-                .filter(item => item.name.includes(input))
-                .map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))
+    const {displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
     
-            dispatch(showDisplayedCountries(triggeredCountry))
-            sessionStorage.setItem('display',JSON.stringify(triggeredCountry))
-        }
-    }
+    useEffect(() => {
+        dispatch(getCountries(input))
+        dispatch(getPinned(pinned))
+        setUrlParam(pinnedCountries.map(item => item.alpha3Code))
+        history.push(urlParam.join(';'))
+    }, [input])
 
     useEffect(() => {
-        displayCountry()
-    }, [input])
+        history.push(urlParam.join(';'))
+    }, [urlParam])
 
     const onChangeHandler = e => {
         if (e.target.value.trim() !== '') {
@@ -50,14 +37,12 @@ const MainTable = () => {
         } else if (e.target.value.trim() === '') {
             setInput('')
             dispatch(showDisplayedCountries([]))
-            sessionStorage.setItem('display', '[]')   
         }
     }
     
     const onClickHandler = () => {
         setInput('')
         dispatch(showDisplayedCountries([]))
-        sessionStorage.setItem('display', '[]')   
     }
 
     const pinHandler = (country, id) => {
@@ -71,11 +56,9 @@ const MainTable = () => {
             })
             const pinnedArr = filteredArr.filter(item => item.isPinned === true)
 
+            setUrlParam(prev => [...prev, pinnedArr[0].alpha3Code])
             dispatch(showDisplayedCountries(filteredArr.filter(item => item.isPinned === false)))
-            sessionStorage.setItem('display', JSON.stringify(filteredArr.filter(item => item.isPinned === false)))
-
             dispatch(pin(pinnedArr[0]))
-            sessionStorage.setItem('pinned', JSON.stringify(JSON.parse(sessionStorage.getItem('pinned')).concat(pinnedArr)))
 
         } else if (country.isPinned === true) {
             const filteredArr = pinnedCountries.map((item) => {
@@ -89,10 +72,8 @@ const MainTable = () => {
             displayedCountries.unshift(unpinnedArr[0])
 
             dispatch(showDisplayedCountries(displayedCountries))
-            sessionStorage.setItem('display',JSON.stringify(displayedCountries))
-
             dispatch(unpin(filteredArr.filter(item => item.isPinned === true)))
-            sessionStorage.setItem('pinned', JSON.stringify(filteredArr.filter(item => item.isPinned === true)))
+            setUrlParam(filteredArr.filter(item => item.isPinned === true))
         }
     }
 
@@ -101,11 +82,9 @@ const MainTable = () => {
         const displayedFilteredArr = displayedCountries.filter(item => item.id !== id)
         const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
 
+        setUrlParam(pinnedFilteredArr.map(item => item.alpha3Code))
         dispatch(deleteFromDisplay(displayedFilteredArr))
-        sessionStorage.setItem('display', JSON.stringify(displayedFilteredArr))
-
         dispatch(deleteFromPinned(pinnedFilteredArr))
-        sessionStorage.setItem('pinned', JSON.stringify(pinnedFilteredArr))
     }
 
     const dragStartHandler = (e, country) => {
@@ -115,7 +94,6 @@ const MainTable = () => {
     const dragOverHandler = e => {
         e.preventDefault()
     }
-
     const dropHandler = (e, country) => {
         e.preventDefault()
         dispatch(showDisplayedCountries(displayedCountries.map( item => {
@@ -128,12 +106,26 @@ const MainTable = () => {
             return item
         })))
     }
-
+    
     const sortCards = (a, b) => {
         if (a.order > b.order) {
             return 1
         } else {
             return -1
+        }
+    }
+
+    const countryName = (name) => {
+        const filteredPinArr = pinnedCountries.filter(item => item.name === name)
+        if( filteredPinArr.length) {
+            return '/details/'+filteredPinArr[0].alpha3Code+'/isPinned'
+        } else {
+            const filteredArr = displayedCountries.filter(item => item.name === name)
+            if (filteredArr.length) {
+                return '/details/'+filteredArr[0].alpha3Code+'/notPinned'
+            } else {
+                return 
+            }
         }
     }
 
@@ -154,16 +146,16 @@ const MainTable = () => {
             </div>
             <div  className='countries-wrapper'>
                 <Flex justify='center' direction='row'>
-                    {pinnedCountries ? pinnedCountries.map((country, index) => (
+                    {pinnedCountries.length ? pinnedCountries.sort(sortCards).map((country, index) => (
                         <CountryCard
-                            path={'/details?id='+country.id}
+                            path={() => countryName(country.name)}
                             deleteHandler={deleteHandler}
-                            key={index}
                             onChange={pinHandler}
-                            country={country}
-                        />)
+                            country={country} 
+                        />
+                    )
                     ) : null}
-                    {displayedCountries ? displayedCountries.sort(sortCards).map((country, index) => (
+                    {displayedCountries.length ? displayedCountries.sort(sortCards).map((country, index) => (
                         <div 
                             onDragStart={e => dragStartHandler(e, country)}
                             onDragOver={e => dragOverHandler(e)}
@@ -172,7 +164,7 @@ const MainTable = () => {
                             key={index}
                         >
                             <CountryCard
-                                path={'/details?id='+country.id}
+                                path={() => countryName(country.name)}
                                 deleteHandler={deleteHandler}
                                 onChange={pinHandler}
                                 country={country}

@@ -1,11 +1,46 @@
-const allCountries = `https://restcountries.eu/rest/v2/all?fields=name;callingCodes;flag;languages;population;currencies`
+import { v4 as uuid } from 'uuid';
+
+
+export const GET_DETAILS = 'GET_DETAILS'
+export const getDetails = (name) => {
+    return async dispatch => {
+        const response = await fetch(`https://restcountries.eu/rest/v2/alpha/${name}`)
+        const json = await response.json()
+        dispatch({type: GET_DETAILS, payload: json})
+    }
+}
 
 export const GET_COUNTRIES = 'GET_COUNTRIES'
-export function getCountries() {
+export function getCountries(name) {
     return async dispatch => {
-        const response = await fetch(allCountries)
-        const json = await response.json() 
-        dispatch({type: GET_COUNTRIES, payload: json})
+        try {
+            const response = await fetch(name ? `https://restcountries.eu/rest/v2/name/${name}?fields=name;callingCodes;alpha3Code;languages;population;currencies;flag` : null)
+            const json = await response.json()
+            if (json.status) {
+                console.error('Err:', json.status)
+            } else {
+                dispatch({type: SHOW_DISPLAYED_COUNTRIES, payload: json.map((country, index) => Object.assign(country, {isPinned: false, id: uuid(), order: index}))})
+            }
+        } catch (e) {
+            console.error('Err', e)
+        } 
+    }
+}
+
+export const GET_PINNED = 'GET_PINNED'
+export function getPinned(params) {
+    return async dispatch => {
+        try {
+            const response = await fetch(params ? `https://restcountries.eu/rest/v2/alpha?codes=${params}` : null)
+            const json = await response.json()
+            if (json.status) {
+                console.error('Err:', json.status)
+            } else {
+                dispatch({type: GET_PINNED, payload: json?.map((country, index) => Object.assign(country, {isPinned: true, id: uuid(), order: index}))})
+            }
+        } catch (e) {
+            console.error('Err', e)
+        }
     }
 }
 
@@ -25,13 +60,6 @@ export function pin(payload) {
     }
 }
 
-export const GET_PINNED = 'GET_PINNED'
-export function getPinned(payload) {
-    return {
-        type: GET_PINNED,
-        payload
-    }
-}
 export const UNPIN = 'UNPIN'
 export function unpin(payload) {
     return {
