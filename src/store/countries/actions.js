@@ -14,7 +14,7 @@ export const GET_COUNTRIES = 'GET_COUNTRIES'
 export function getCountries(name) {
     return async dispatch => {
         try {
-            const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}?fields=name;callingCodes;alpha3Code;languages;population;currencies;flag`)
+            const response = await fetch(name ? `https://restcountries.eu/rest/v2/name/${name}?fields=name;callingCodes;alpha3Code;languages;population;currencies;flag` : null)
             const json = await response.json()
             if (json.status) {
                 console.error('Err:', json.status)
@@ -24,6 +24,23 @@ export function getCountries(name) {
         } catch (e) {
             console.error('Err', e)
         } 
+    }
+}
+
+export const GET_PINNED = 'GET_PINNED'
+export function getPinned(params) {
+    return async dispatch => {
+        try {
+            const response = await fetch(params ? `https://restcountries.eu/rest/v2/alpha?codes=${params}` : null)
+            const json = await response.json()
+            if (json.status) {
+                console.error('Err:', json.status)
+            } else {
+                dispatch({type: GET_PINNED, payload: json?.map((country, index) => Object.assign(country, {isPinned: true, id: uuid(), order: index}))})
+            }
+        } catch (e) {
+            console.error('Err', e)
+        }
     }
 }
 
@@ -43,13 +60,6 @@ export function pin(payload) {
     }
 }
 
-export const GET_PINNED = 'GET_PINNED'
-export function getPinned(payload) {
-    return {
-        type: GET_PINNED,
-        payload
-    }
-}
 export const UNPIN = 'UNPIN'
 export function unpin(payload) {
     return {

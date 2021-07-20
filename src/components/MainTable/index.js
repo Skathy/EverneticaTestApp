@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom';
 import { getCountries, showDisplayedCountries, pin, unpin, deleteFromDisplay, deleteFromPinned, getPinned } from '../../store/countries/actions';
 import CustomButton from '../customButton/index';
 import CustomInput from '../customInput/index';
@@ -8,17 +9,25 @@ import './style.scss'
 import Flex from './../../assets/styledComponents/Flex';
 
 const MainTable = () => {
+    const {pinned} = useParams()
+    const history = useHistory()
     const dispatch = useDispatch()
     const [input, setInput] = useState('')
     const [currentCard, setCurrentCard] = useState({})
+    const [urlParam, setUrlParam] = useState([])
 
     const {displayedCountries, pinnedCountries}= useSelector(state => state.countryReducer)
     
     useEffect(() => {
         dispatch(getCountries(input))
-        
+        dispatch(getPinned(pinned))
+        setUrlParam(pinnedCountries.map(item => item.alpha3Code))
+        history.push(urlParam.join(';'))
     }, [input])
 
+    useEffect(() => {
+        history.push(urlParam.join(';'))
+    }, [urlParam])
 
     const onChangeHandler = e => {
         if (e.target.value.trim() !== '') {
@@ -47,6 +56,7 @@ const MainTable = () => {
             })
             const pinnedArr = filteredArr.filter(item => item.isPinned === true)
 
+            setUrlParam(prev => [...prev, pinnedArr[0].alpha3Code])
             dispatch(showDisplayedCountries(filteredArr.filter(item => item.isPinned === false)))
             dispatch(pin(pinnedArr[0]))
 
@@ -63,6 +73,7 @@ const MainTable = () => {
 
             dispatch(showDisplayedCountries(displayedCountries))
             dispatch(unpin(filteredArr.filter(item => item.isPinned === true)))
+            setUrlParam(filteredArr.filter(item => item.isPinned === true))
         }
     }
 
@@ -71,6 +82,7 @@ const MainTable = () => {
         const displayedFilteredArr = displayedCountries.filter(item => item.id !== id)
         const pinnedFilteredArr = pinnedCountries.filter(item => item.id !== id)
 
+        setUrlParam(pinnedFilteredArr.map(item => item.alpha3Code))
         dispatch(deleteFromDisplay(displayedFilteredArr))
         dispatch(deleteFromPinned(pinnedFilteredArr))
     }
@@ -82,7 +94,6 @@ const MainTable = () => {
     const dragOverHandler = e => {
         e.preventDefault()
     }
-
     const dropHandler = (e, country) => {
         e.preventDefault()
         dispatch(showDisplayedCountries(displayedCountries.map( item => {
@@ -95,7 +106,7 @@ const MainTable = () => {
             return item
         })))
     }
-
+    
     const sortCards = (a, b) => {
         if (a.order > b.order) {
             return 1
@@ -135,14 +146,14 @@ const MainTable = () => {
             </div>
             <div  className='countries-wrapper'>
                 <Flex justify='center' direction='row'>
-                    {pinnedCountries.length ? pinnedCountries.map((country, index) => (
+                    {pinnedCountries.length ? pinnedCountries.sort(sortCards).map((country, index) => (
                         <CountryCard
                             path={() => countryName(country.name)}
                             deleteHandler={deleteHandler}
-                            key={index}
                             onChange={pinHandler}
-                            country={country}
-                        />)
+                            country={country} 
+                        />
+                    )
                     ) : null}
                     {displayedCountries.length ? displayedCountries.sort(sortCards).map((country, index) => (
                         <div 
